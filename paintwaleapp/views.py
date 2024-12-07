@@ -6,3 +6,6 @@ from django.http import HttpResponse
 
 def index(request):
     return HttpResponse("Hello, world. You're at the paintwale index.")
+
+def home(request):
+    return render(request, 'paintwaleapp/home.html')
