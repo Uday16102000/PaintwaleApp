@@ -1,13 +1,5 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paintwale</title>
-    <link rel="stylesheet" href="{% static 'paintwaleapp/header.css' %}">
-</head>
-<body>
+
     <nav class="navbar navbar-expand-lg navbar-dark header-color bg-dark">
         <div class="container-fluid">
             <img src="{% static 'paintwaleapp/images/paintwale.png' %}" class="brand-logo" alt="Example Image">           
@@ -22,11 +14,12 @@
                         <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Services</a>
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">About</a>
+                        <a class="nav-link" href="">Services</a>
                     </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="">Contact</a>
                     </li>
@@ -35,6 +28,4 @@
         </div>
     </nav>
 
-    
-</body>
-</html>
+

@@ -43,3 +43,8 @@
     margin-top: 10px;
   }
 }
+
+html {
+    scroll-behavior: smooth;
+ }
+ 

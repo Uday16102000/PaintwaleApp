@@ -9,3 +9,6 @@ def index(request):
 
 def home(request):
     return render(request, 'paintwaleapp/home.html')
+
+def about(request):
+    return render(request, 'paintwaleapp/about.html')
