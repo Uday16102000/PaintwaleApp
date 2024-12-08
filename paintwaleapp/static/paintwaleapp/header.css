@@ -37,3 +37,9 @@
 .nav-button {
   background-color: #a6c8e4;
 }
+@media (max-width: 981px) {
+  .nav-divider {
+    border-top: 1px solid grey;
+    margin-top: 10px;
+  }
+}

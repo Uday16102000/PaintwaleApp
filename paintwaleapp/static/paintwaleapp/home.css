@@ -6,62 +6,116 @@
   .carousel-container {
     margin-top: 90px !important;
   }
-}
-@media (min-width: 1100px) {
-  .carousel-caption {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: #ffffff;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 15px;
-    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.3);
-    max-width: 80%;
-    opacity: 0;
-    transition: opacity 0.5s ease, transform 0.5s ease;
-  }
 
-  .carousel-item.active .carousel-caption {
-    opacity: 1;
-    transform: translate(-50%, -40%);
+  .carousel img {
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+  }
+}
+.carousel-caption {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #ffffff;
+  padding: 20px;
+  /* background: rgba(80, 77, 77, 0.5); */
+  background: rgba(0, 0, 0, 0.5);
+
+  border-radius: 15px;
+  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.3);
+  max-width: 80%;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.carousel-item.active .carousel-caption {
+  opacity: 1;
+  transform: translate(-50%, -40%);
+}
+
+.carousel-caption h5 {
+  font-size: 2.5rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+
+  transition: color 0.3s ease;
+}
+
+.carousel-caption p {
+  font-size: 1.2rem;
+  font-weight: 300;
+  margin-top: 0;
+  color: #f1f1f1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  line-height: 1.6;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-caption h5:hover {
+  color: #3a8dff;
+}
+
+.carousel-caption p:hover {
+  opacity: 0.8;
+}
+
+.carousel-item img {
+  transition: transform 0.5s ease;
+}
+
+.carousel-item:hover img {
+  transform: scale(1.05);
+}
+@media (max-width: 1191px) {
+  .carousel-caption {
+    width: 370px;
+    height: 370px;
+    background: none;
+    max-width: 70%;
   }
 
   .carousel-caption h5 {
-    font-size: 2.5rem;
+    font-size: 2.1rem;
     font-family: "Montserrat", sans-serif;
-    font-weight: 700;
+    font-weight: 600;
     margin-bottom: 10px;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    color: #e4d5d5;
     transition: color 0.3s ease;
   }
 
   .carousel-caption p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 300;
     margin-top: 0;
-    color: #f1f1f1;
+    color: #e4d5d5;
     line-height: 1.6;
     transition: opacity 0.3s ease;
   }
+}
 
-  .carousel-caption h5:hover {
-    color: #3a8dff;
+@media (min-width: 418px) and (max-width: 1193px) {
+  .carousel-caption {
+    height: 315px;
+    background: none;
+    max-width: 70%;
   }
+}
 
-  .carousel-caption p:hover {
-    opacity: 0.8;
-  }
-
-  .carousel-item img {
-    transition: transform 0.5s ease;
-  }
-
-  .carousel-item:hover img {
-    transform: scale(1.05);
+@media (min-width: 1440px) {
+  .carousel-caption {
+    height: 280px;
+    background: none;
+    max-width: 70%;
   }
 }

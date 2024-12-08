@@ -20,7 +20,7 @@
       <div class="carousel-indicators">
         <button
           type="button"
-          data-bs-target="#carouselExampleDark"
+          data-bs-target="#carousel"
           data-bs-slide-to="0"
           class="active"
           aria-current="true"
@@ -28,21 +28,21 @@
         ></button>
         <button
           type="button"
-          data-bs-target="#carouselExampleDark"
+          data-bs-target="#carousel"
           data-bs-slide-to="1"
           aria-label="Slide 2"
         ></button>
         <button
           type="button"
-          data-bs-target="#carouselExampleDark"
+          data-bs-target="#carousel"
           data-bs-slide-to="2"
           aria-label="Slide 3"
         ></button>
       </div>
       <div class="carousel-inner">
-        <div class="carousel-item active" data-bs-interval="10000">
+        <div class="carousel-item active" data-bs-interval="5000">
           <img
-            class="d-block w-100"
+            class="d-block w-100 " 
             src="{% static 'paintwaleapp/images/car3.jpg' %}"
             alt="Example Image"
           />
@@ -60,11 +60,11 @@
             src="{% static 'paintwaleapp/images/car4.jpg' %}"
             alt="Example Image"
           />
-          <div class="carousel-caption d-none d-md-block">
+          <div class="carousel-caption ">
             <h5>Create the perfect ambiance with just one coat!</h5>
             <p>
               Achieve a stunning look and feel in any room with our rich,
-              long-lasting paint that covers beautifully in just one coat.
+              long-lasting paint.
             </p>
           </div>
         </div>
@@ -74,7 +74,7 @@
             src="{% static 'paintwaleapp/images/car5.jpg' %}"
             alt="Example Image"
           />
-          <div class="carousel-caption d-none d-md-block">
+          <div class="carousel-caption">
             <h5>Color Your World, Your Way</h5>
             <p>
               Explore a spectrum of shades designed to match your unique style
@@ -103,5 +103,7 @@
       </button>
     </div>
   </body>
+  {% include 'paintwaleapp/about.html' %}
+
   {% endblock %}
 </html>
