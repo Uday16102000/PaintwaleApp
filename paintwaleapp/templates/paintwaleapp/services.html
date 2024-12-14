@@ -1,0 +1,67 @@
+{% extends "paintwaleapp/base.html" %} 
+{% block title %}Services{% endblock %} 
+{% load static %}
+{% block content %}
+
+<section id="service" class="service-section" style="margin-top:50px;">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-12">
+                <div class="header-decoration mb-3">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <i class="fas fa-brush"></i>
+                    </span>
+                    <span class="line"></span>
+                </div>
+            </div>
+
+            <div class="col-12 service-header">
+                <h2 class="section-title">WHAT WE OFFER</h2>
+            </div>
+
+            <div class="col-12 service-description-header">
+                <h3 class="section-subtitle">Premium Painting Solutions</h3>
+            </div>
+
+            <div class="col-12 service-description">
+                <p>
+                    Transform your spaces with our expert painting services. From 
+                    homes to offices, we bring life to your walls with a vibrant 
+                    palette of colors and unmatched craftsmanship. Let us help 
+                    you achieve the perfect look and feel you’ve always dreamed of!
+                </p>
+            </div>
+
+            <div class="col-12">
+                <div class="footer-decoration mt-1">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <i class="fas fa-brush"></i>
+                    </span>
+                    <span class="line"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ">
+            {% for service in service_data %}
+            <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
+              <div class="card">
+                <img src="{% static service.imagePath %}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">{{service.cardTitle}}</h5>
+                  <p class="card-text">{{service.description}}
+                  </p>
+                  <a href="#" class="btn">Buy Now</a>
+                </div>
+              </div>
+           
+            </div>
+            {% endfor %}
+          
+    </div>
+</section>
+
+
+{% endblock %}
