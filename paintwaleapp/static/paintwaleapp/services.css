@@ -52,6 +52,13 @@
   height: 240px;
   object-fit: cover;
 }
+.card-img-top {
+    transition: transform 0.5s ease;
+}
+
+.card-img-top:hover {
+    transform: scale(1.05); /* Zooms in by 5% */
+}
 
 .card {
   display: flex;

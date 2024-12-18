@@ -1,0 +1,101 @@
+{% extends "paintwaleapp/base.html" %} {% block title %}Contact{% endblock %} {%
+load static %} {% block content %}
+
+<section id="contact" class="contact-section">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-lg-12">
+        <h2 class="contact-title">GET IN TOUCH</h2>
+
+        <div class="col-lg-12">
+          <div class="header-decoration mb-3">
+            <span class="icon">
+              <i class="fa fa-envelope"></i>
+            </span>
+            <h2 class="contact-subtitle">Contact With Paintwale</h2>
+            <span class="icon">
+              <i class="fa fa-envelope"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="container">
+      <form
+        id="contact_form"
+        method="POST"
+        action="{% url 'paintwale:sendMessage' %}"
+      >
+        {% csrf_token %}
+
+        <div class="name">
+          <label for="name"></label>
+          <input
+            type="text"
+            placeholder="My name is"
+            name="name"
+            id="name_input"
+            required
+          />
+        </div>
+        <div class="email">
+          <label for="email"></label>
+          <input
+            type="email"
+            placeholder="My e-mail is"
+            name="email"
+            id="email_input"
+            required
+          />
+        </div>
+        <div class="telephone">
+          <label for="name"></label>
+          <input
+            type="text"
+            placeholder="My number is"
+            name="telephone"
+            id="telephone_input"
+            required
+          />
+        </div>
+        <div class="subject">
+          <label for="subject"></label>
+          <select
+            placeholder="Select Service"
+            name="subject"
+            id="subject_input"
+            required
+          >
+            {% if service_title %}
+            <option value="{{ service_title }}" selected>
+              {{ service_title }}
+            </option>
+            {% else %}
+            <option disabled hidden selected>Select Service</option>
+            {% endif %}
+             {% for title in service_type %}
+            <option value="{{ title }}">{{ title }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="message">
+          <label for="message"></label>
+          <textarea
+            name="message"
+            placeholder="I'd like to chat about"
+            id="message_input"
+            cols="30"
+            rows="5"
+            required
+          ></textarea>
+        </div>
+        <div class="submit">
+          <input type="submit" value="Send Message" id="form_button" />
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

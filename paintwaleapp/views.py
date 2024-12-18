@@ -1,7 +1,9 @@
 from django.shortcuts import render
-
+from django.core.mail import send_mail
+from django.conf import settings
+from django.http import JsonResponse
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 service_data = [
         {
             "imagePath": "paintwaleapp/images/servicecard1.jpg",
@@ -34,15 +36,121 @@ service_data = [
             "description": "Select the perfect shade for your doorsteps with our expert guidance and high-quality paint options, ensuring durability and aesthetic appeal."
         }
     ]
+service_type=[
+    "Decorative Paints", 
+    "Enamels", 
+    "Wall Putty", 
+    "Polyurethane Polish", 
+    "Waterproofing Chemicals", 
+    "Doorstep Shade Selection"
+]
 
 def index(request):
     return HttpResponse("Hello, world. You're at the paintwale index.")
 
 def home(request):
-    return render(request, 'paintwaleapp/home.html', {'service_data': service_data})
+    return render(request, 'paintwaleapp/home.html', {'service_data': service_data,'service_type':service_type})
 
 def about(request):
     return render(request, 'paintwaleapp/about.html')
 def service(request):
 
     return render(request, 'paintwaleapp/services.html', {'service_data': service_data})
+
+def contact(request):
+    service_title = request.GET.get('service', '') 
+    return render(request, 'paintwaleapp/contact.html', {'service_title': service_title,'service_type':service_type})
+def sendMessage(request):
+
+    name = request.POST.get('name', '') 
+    email = request.POST.get('email', '')
+    telephone = request.POST.get('telephone', '')
+    subject = request.POST.get('subject', '')
+    message = request.POST.get('message', '')
+
+    print("Email sent successfully!", name)
+
+    # Check if required fields are missing
+    if not name or not email or not telephone or not message:
+        return JsonResponse({'error': 'All fields except subject are required.'})
+    
+    # Construct the HTML email content for the team
+    email_subject_to_team = f"Message from {name} - {subject}"
+    email_body_to_team = f"""
+    <html>
+        <body>
+            <!-- Header with brand logo on the left -->
+            <div style="padding: 20px; background-color: #f0f0f0; border-bottom: 1px solid #ccc;">
+             <img src="https://images.app.goo.gl/GXNdHYpNUeL1cQ1e7" alt="Brand Logo" style="float: left; height: 50px;">                <h3 style="text-align: center; color: #333;">Contact Form Submission</h3>
+            </div>
+            
+            <!-- Main message content -->
+            <div style="padding: 20px;">
+                <p><strong>Name:</strong> {name}</p>
+                <p><strong>Email:</strong> {email}</p>
+                <p><strong>Telephone:</strong> {telephone}</p>
+                <p><strong>Message:</strong><br>{message}</p>
+                <p><strong>Subject:</strong><br>{subject}</p>
+            </div>
+
+            <!-- Footer with text aligned to the right -->
+            <div style="padding: 20px; background-color: #f0f0f0; border-top: 1px solid #ccc; text-align: right;">
+                <p style="font-size: 12px; color: #777;">Powered by Your PaintWale</p>
+            </div>
+        </body>
+    </html>
+    """
+
+    # Construct the HTML email content for the user (acknowledgment email)
+    email_subject_to_user = "We have received your request"
+    email_body_to_user = f"""
+    <html>
+        <body>
+            <div style="padding: 20px; background-color: #f0f0f0; border-bottom: 1px solid #ccc;">
+                <img src="https://images.app.goo.gl/GXNdHYpNUeL1cQ1e7" alt="Brand Logo" style="float: left; height: 50px;">
+                <h3 style="text-align: center; color: #333;">Thank you for contacting us</h3>
+            </div>
+            
+            <div style="padding: 20px;">
+                <p>Dear {name},</p>
+                <p>Thank you for reaching out to us. We have received your message and our team will get back to you soon.</p>
+                <p>Below are the details of your request:</p>
+                <p><strong>Subject:</strong> {subject}</p>
+                <p><strong>Message:</strong><br>{message}</p>
+                <p>We appreciate your interest, and one of our team members will reach out shortly.</p>
+                <p>Best regards,<br>Your PaintWale Team</p>
+            </div>
+
+            <div style="padding: 20px; background-color: #f0f0f0; border-top: 1px solid #ccc; text-align: right;">
+                <p style="font-size: 12px; color: #777;">Powered by Your PaintWale</p>
+            </div>
+        </body>
+    </html>
+    """
+
+    # Send email to your team
+    try:
+        send_mail(
+            email_subject_to_team,
+            '', 
+            email,  # Sender's email
+            [settings.EMAIL_HOST_USER], 
+            fail_silently=False,
+            html_message=email_body_to_team,  
+        )
+
+        # Send acknowledgment email to the user
+        send_mail(
+            email_subject_to_user,
+            '', 
+            settings.EMAIL_HOST_USER,  # Sender's email (your email address)
+            [email],  # User's email address
+            fail_silently=False,
+            html_message=email_body_to_user,  
+        )
+
+        return JsonResponse({'success': 'Message sent successfully!'})
+
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return JsonResponse({'error': f'Failed to send message. Error: {str(e)}'})

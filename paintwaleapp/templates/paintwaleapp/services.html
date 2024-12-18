@@ -53,7 +53,7 @@
                   <h5 class="card-title">{{service.cardTitle}}</h5>
                   <p class="card-text">{{service.description}}
                   </p>
-                  <a href="#" class="btn">Buy Now</a>
+                  <a href="{% url 'paintwale:contact' %}?service={{ service.cardTitle }}" class="btn">Buy Now</a>
                 </div>
               </div>
            
