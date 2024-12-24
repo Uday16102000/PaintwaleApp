@@ -70,11 +70,9 @@ def sendMessage(request):
 
     print("Email sent successfully!", name)
 
-    # Check if required fields are missing
     if not name or not email or not telephone or not message:
         return JsonResponse({'error': 'All fields except subject are required.'})
     
-    # Construct the HTML email content for the team
     email_subject_to_team = f"Message from {name} - {subject}"
     email_body_to_team = f"""
     <html>
@@ -101,7 +99,6 @@ def sendMessage(request):
     </html>
     """
 
-    # Construct the HTML email content for the user (acknowledgment email)
     email_subject_to_user = "We have received your request"
     email_body_to_user = f"""
     <html>
@@ -128,23 +125,21 @@ def sendMessage(request):
     </html>
     """
 
-    # Send email to your team
     try:
         send_mail(
             email_subject_to_team,
             '', 
-            email,  # Sender's email
+            email, 
             [settings.EMAIL_HOST_USER], 
             fail_silently=False,
             html_message=email_body_to_team,  
         )
 
-        # Send acknowledgment email to the user
         send_mail(
             email_subject_to_user,
             '', 
-            settings.EMAIL_HOST_USER,  # Sender's email (your email address)
-            [email],  # User's email address
+            settings.EMAIL_HOST_USER,  
+            [email], 
             fail_silently=False,
             html_message=email_body_to_user,  
         )
