@@ -49,10 +49,10 @@ def index(request):
     return HttpResponse("Hello, world. You're at the paintwale index.")
 
 def home(request):
-    return render(request, 'paintwaleapp/home.html', {'service_data': service_data,'service_type':service_type})
+    return render(request, 'paintwaleapp/home.html', {'service_data': service_data,'service_type':service_type,'exclude_footer': True})
 
 def about(request):
-    return render(request, 'paintwaleapp/about.html')
+    return render(request, 'paintwaleapp/about.html',{'exclude_footer': False})
 def service(request):
 
     return render(request, 'paintwaleapp/services.html', {'service_data': service_data})

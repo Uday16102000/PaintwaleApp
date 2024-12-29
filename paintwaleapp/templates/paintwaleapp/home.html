@@ -1,105 +1,101 @@
-{% extends "paintwaleapp/base.html" %} 
-{% block title %}Home{% endblock %} 
-{%block content %} 
-{% load static %}
+{% extends "paintwaleapp/base.html" %} {% block title %}Home{% endblock %}
+{%block content %} {% load static %}
 
-    <div
-      id="carousel"
-      class="carousel carousel-dark slide carousel-container"
-      style="margin-top: 100px"
-      data-bs-ride="carousel"
-    >
-      <div class="carousel-indicators">
-        <button
-          type="button"
-          data-bs-target="#carousel"
-          data-bs-slide-to="0"
-          class="active"
-          aria-current="true"
-          aria-label="Slide 1"
-        ></button>
-        <button
-          type="button"
-          data-bs-target="#carousel"
-          data-bs-slide-to="1"
-          aria-label="Slide 2"
-        ></button>
-        <button
-          type="button"
-          data-bs-target="#carousel"
-          data-bs-slide-to="2"
-          aria-label="Slide 3"
-        ></button>
+<div
+  id="carousel"
+  class="carousel carousel-dark slide carousel-container"
+  style="margin-top: 100px"
+  data-bs-ride="carousel"
+>
+  <div class="carousel-indicators">
+    <button
+      type="button"
+      data-bs-target="#carousel"
+      data-bs-slide-to="0"
+      class="active"
+      aria-current="true"
+      aria-label="Slide 1"
+    ></button>
+    <button
+      type="button"
+      data-bs-target="#carousel"
+      data-bs-slide-to="1"
+      aria-label="Slide 2"
+    ></button>
+    <button
+      type="button"
+      data-bs-target="#carousel"
+      data-bs-slide-to="2"
+      aria-label="Slide 3"
+    ></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="5000">
+      <img
+        class="d-block w-100"
+        src="{% static 'paintwaleapp/images/car3.jpg' %}"
+        alt="Example Image"
+      />
+      <div class="carousel-caption">
+        <h5>Transform Your Space with Color</h5>
+        <p>
+          Achieve a stunning look and feel in any room with our rich,
+          long-lasting paint that covers beautifully in just one coat.
+        </p>
       </div>
-      <div class="carousel-inner">
-        <div class="carousel-item active" data-bs-interval="5000">
-          <img
-            class="d-block w-100 " 
-            src="{% static 'paintwaleapp/images/car3.jpg' %}"
-            alt="Example Image"
-          />
-          <div class="carousel-caption">
-            <h5>Transform Your Space with Color</h5>
-            <p>
-              Achieve a stunning look and feel in any room with our rich,
-              long-lasting paint that covers beautifully in just one coat.
-            </p>
-          </div>
-        </div>
-        <div class="carousel-item" data-bs-interval="2000">
-          <img
-            class="d-block w-100"
-            src="{% static 'paintwaleapp/images/car4.jpg' %}"
-            alt="Example Image"
-          />
-          <div class="carousel-caption ">
-            <h5>Create the perfect ambiance with just one coat!</h5>
-            <p>
-              Achieve a stunning look and feel in any room with our rich,
-              long-lasting paint.
-            </p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img
-            class="d-block w-100"
-            src="{% static 'paintwaleapp/images/car5.jpg' %}"
-            alt="Example Image"
-          />
-          <div class="carousel-caption">
-            <h5>Color Your World, Your Way</h5>
-            <p>
-              Explore a spectrum of shades designed to match your unique style
-              and vision.
-            </p>
-          </div>
-        </div>
-      </div>
-      <button
-        class="carousel-control-prev"
-        type="button"
-        data-bs-target="#carousel"
-        data-bs-slide="prev"
-      >
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button
-        class="carousel-control-next"
-        type="button"
-        data-bs-target="#carousel"
-        data-bs-slide="next"
-      >
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
     </div>
-  {% include 'paintwaleapp/about.html' %}
-  <!-- {% include 'paintwaleapp/services.html' %} -->
-  {% include 'paintwaleapp/services.html' with service_data=service_data %}
-  {% include 'paintwaleapp/contact.html' %}
-
-
-
-
-  {% endblock %}
+    <div class="carousel-item" data-bs-interval="2000">
+      <img
+        class="d-block w-100"
+        src="{% static 'paintwaleapp/images/car4.jpg' %}"
+        alt="Example Image"
+      />
+      <div class="carousel-caption">
+        <h5>Create the perfect ambiance with just one coat!</h5>
+        <p>
+          Achieve a stunning look and feel in any room with our rich,
+          long-lasting paint.
+        </p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img
+        class="d-block w-100"
+        src="{% static 'paintwaleapp/images/car5.jpg' %}"
+        alt="Example Image"
+      />
+      <div class="carousel-caption">
+        <h5>Color Your World, Your Way</h5>
+        <p>
+          Explore a spectrum of shades designed to match your unique style and
+          vision.
+        </p>
+      </div>
+    </div>
+  </div>
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#carousel"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#carousel"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+{% include 'paintwaleapp/about.html' %}
+{% include 'paintwaleapp/services.html' with service_data=service_data %} 
+ {% include 'paintwaleapp/contact.html' %}
+{% endblock %}
+{% block footer %}
+ {% include 'paintwaleapp/footer.html' %}
+{% endblock %}
