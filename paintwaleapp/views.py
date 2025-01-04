@@ -149,3 +149,9 @@ def sendMessage(request):
     except Exception as e:
         print(f"Error sending email: {e}")
         return JsonResponse({'error': f'Failed to send message. Error: {str(e)}'})
+    
+
+def serviceDetails(request):
+    service_title = request.GET.get('service', '') 
+
+    return render(request,"paintwaleapp/service_details.html" ,{'service_title': service_title})

@@ -1,0 +1,76 @@
+{% extends "paintwaleapp/base.html" %} 
+{% block title %}Service Details{% endblock %} 
+{% load static %}
+{% block content %}
+
+<section class="service-details-section" id="service-detail">
+    <h1 class="m-4 ">
+        {% if  service_title %}
+        {{ service_title }}
+        {% endif %}
+    </h1>
+
+    <div class="servicedetails-card-container">
+        <div class="servicedetails-card">
+          <div class="servicedetails-card-image">
+            <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Tractor Emulsion">
+          </div>
+          <div class="servicedetails-card-details">
+            <h3>Tractor Emulsion</h3>
+            <p>Finish: Matt</p>
+            <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
+          </div>
+        </div>
+        <div class="servicedetails-card">
+            <div class="servicedetails-card-image">
+              <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Tractor Emulsion">
+            </div>
+            <div class="servicedetails-card-details">
+              <h3>Tractor Emulsion</h3>
+              <p>Finish: Matt</p>
+              <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
+            </div>
+          </div>
+          <div class="servicedetails-card">
+            <div class="servicedetails-card-image">
+              <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Tractor Emulsion">
+            </div>
+            <div class="servicedetails-card-details">
+              <h3>Tractor Emulsion</h3>
+              <p>Finish: Matt</p>
+              <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
+            </div>
+          </div>
+        <div class="servicedetails-card">
+          <div class="servicedetails-card-image">
+            <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Royale Matt">
+          </div>
+          <div class="servicedetails-card-details">
+            <h3>Royale Matt</h3>
+            <p>Finish: Matt</p>
+            <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
+          </div>
+        </div>
+        <div class="servicedetails-card">
+          <div class="servicedetails-card-image">
+            <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Royale Matt">
+          </div>
+          <div class="servicedetails-card-details">
+            <h3>Royale Matt</h3>
+            <p>Finish: Matt</p>
+            <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
+          </div>
+        </div>
+        <div class="servicedetails-card">
+          <div class="servicedetails-card-image">
+            <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Apcolite Premium Emulsion">
+          </div>
+          <div class="servicedetails-card-details">
+            <h3>Apco Premium</h3>
+            <p>Finish: Matt</p>
+            <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
+          </div>
+        </div>
+      </div>
+      
+{% endblock %}
