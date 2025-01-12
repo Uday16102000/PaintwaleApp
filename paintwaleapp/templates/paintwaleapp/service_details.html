@@ -24,7 +24,7 @@
         <div class="servicedetails-card-details">
           <h3>{{ service.service_detail_title}}</h3>
           <p>Finish:{{ service.finish}}</p>
-          <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
+          <a href="{% url 'paintwale:contact' %}?service={{ service_detail }}" class="service-detail-btn">View Price Details</a>
         </div>
       </div>
       {% endfor %}
