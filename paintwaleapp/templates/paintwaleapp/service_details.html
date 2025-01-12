@@ -5,72 +5,29 @@
 
 <section class="service-details-section" id="service-detail">
     <h1 class="m-4 ">
-        {% if  service_title %}
-        {{ service_title }}
+        {% if  service_detail %}
+        {{ service_detail }}
         {% endif %}
     </h1>
-
+    <h1>
+      {% if error_message %}
+      {{ error_message }}
+      {% endif %}
+    </h1>
     <div class="servicedetails-card-container">
-        <div class="servicedetails-card">
-          <div class="servicedetails-card-image">
-            <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Tractor Emulsion">
-          </div>
-          <div class="servicedetails-card-details">
-            <h3>Tractor Emulsion</h3>
-            <p>Finish: Matt</p>
-            <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
-          </div>
+      {% for service in service_images%}
+
+      <div class="servicedetails-card">
+        <div class="servicedetails-card-image">
+          <img src="{{ service.image.url }}" alt="Tractor Emulsion">
         </div>
-        <div class="servicedetails-card">
-            <div class="servicedetails-card-image">
-              <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Tractor Emulsion">
-            </div>
-            <div class="servicedetails-card-details">
-              <h3>Tractor Emulsion</h3>
-              <p>Finish: Matt</p>
-              <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
-            </div>
-          </div>
-          <div class="servicedetails-card">
-            <div class="servicedetails-card-image">
-              <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Tractor Emulsion">
-            </div>
-            <div class="servicedetails-card-details">
-              <h3>Tractor Emulsion</h3>
-              <p>Finish: Matt</p>
-              <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
-            </div>
-          </div>
-        <div class="servicedetails-card">
-          <div class="servicedetails-card-image">
-            <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Royale Matt">
-          </div>
-          <div class="servicedetails-card-details">
-            <h3>Royale Matt</h3>
-            <p>Finish: Matt</p>
-            <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
-          </div>
+        <div class="servicedetails-card-details">
+          <h3>{{ service.service_detail_title}}</h3>
+          <p>Finish:{{ service.finish}}</p>
+          <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
         </div>
-        <div class="servicedetails-card">
-          <div class="servicedetails-card-image">
-            <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Royale Matt">
-          </div>
-          <div class="servicedetails-card-details">
-            <h3>Royale Matt</h3>
-            <p>Finish: Matt</p>
-            <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
-          </div>
-        </div>
-        <div class="servicedetails-card">
-          <div class="servicedetails-card-image">
-            <img src="{% static 'paintwaleapp/images/car3.jpg' %}" alt="Apcolite Premium Emulsion">
-          </div>
-          <div class="servicedetails-card-details">
-            <h3>Apco Premium</h3>
-            <p>Finish: Matt</p>
-            <a href="{% url 'paintwale:contact' %}?service={{ service_title }}" class="service-detail-btn">View Price Details</a>
-          </div>
-        </div>
+      </div>
+      {% endfor %}
       </div>
       
 {% endblock %}

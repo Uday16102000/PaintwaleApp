@@ -4,62 +4,55 @@ from django.conf import settings
 from django.http import JsonResponse
 # Create your views here.
 from django.http import HttpResponse, JsonResponse
-service_data = [
-        {
-            "imagePath": "paintwaleapp/images/servicecard1.jpg",
-            "cardTitle": "Decorative Paints",
-            "description": "Enhance your home with our wide range of decorative paints designed for every style. Choose the perfect shade for your walls and give your home a new look."
-        },
-        {
-            "imagePath": "paintwaleapp/images/servicecard2.jpg",
-            "cardTitle": "Enamels",
-            "description": "Our premium enamels offer long-lasting protection and a glossy finish for various surfaces. Ideal for metal, wood, and other materials."
-        },
-        {
-            "imagePath": "paintwaleapp/images/servicecard3.jpg",
-            "cardTitle": "Wall Putty",
-            "description": "Smooth out rough surfaces with our wall putty. Ideal for repairing and filling cracks, ensuring a flawless finish for your walls."
-        },
-        {
-            "imagePath": "paintwaleapp/images/servicecard4.jpg",
-            "cardTitle": "Polyurethane Polish",
-            "description": "Give your wooden furniture a premium finish with our polyurethane polish. It enhances the natural grain while providing protection against wear."
-        },
-        {
-            "imagePath": "paintwaleapp/images/servicecard5.jpg",
-            "cardTitle": "Waterproofing Chemicals",
-            "description": "Protect your walls and surfaces from water damage with our waterproofing chemicals. Ideal for both residential and commercial use."
-        },
-        {
-            "imagePath": "paintwaleapp/images/servicecard6.jpg",
-            "cardTitle": "Doorstep Shade Selection",
-            "description": "Select the perfect shade for your doorsteps with our expert guidance and high-quality paint options, ensuring durability and aesthetic appeal."
-        }
-    ]
-service_type=[
-    "Decorative Paints", 
-    "Enamels", 
-    "Wall Putty", 
-    "Polyurethane Polish", 
-    "Waterproofing Chemicals", 
-    "Doorstep Shade Selection"
-]
+from .constants import BRAND_NAME
+
+from paintwaleapp.models import Service, ServiceImage
+def getAllServiceType():
+    service_type =Service.objects.values_list('service_name',flat=True)
+    return service_type
+
 
 def index(request):
     return HttpResponse("Hello, world. You're at the paintwale index.")
 
 def home(request):
-    return render(request, 'paintwaleapp/home.html', {'service_data': service_data,'service_type':service_type,'exclude_footer': True})
+
+    services = Service.objects.all()
+    service_type = getAllServiceType()
+    context ={
+        'brand_name': BRAND_NAME,
+        'service_data': services,
+        'service_type':service_type,
+        'exclude_footer': True
+
+    }
+
+    return render(request, 'paintwaleapp/home.html', context)
 
 def about(request):
-    return render(request, 'paintwaleapp/about.html',{'exclude_footer': False})
-def service(request):
+    context ={
+        'brand_name': BRAND_NAME,
+        'exclude_footer': False
 
-    return render(request, 'paintwaleapp/services.html', {'service_data': service_data})
+    }
+    return render(request, 'paintwaleapp/about.html',context)
+def service(request):
+    services = Service.objects.all()
+
+
+    return render(request, 'paintwaleapp/services.html', {'service_data': services})
 
 def contact(request):
     service_title = request.GET.get('service', '') 
-    return render(request, 'paintwaleapp/contact.html', {'service_title': service_title,'service_type':service_type})
+    service_type = getAllServiceType()
+    context ={
+        'brand_name': BRAND_NAME,
+        'service_title': service_title,
+        'service_type':service_type
+
+    }
+
+    return render(request, 'paintwaleapp/contact.html', context)
 def sendMessage(request):
 
     name = request.POST.get('name', '') 
@@ -93,7 +86,7 @@ def sendMessage(request):
 
             <!-- Footer with text aligned to the right -->
             <div style="padding: 20px; background-color: #f0f0f0; border-top: 1px solid #ccc; text-align: right;">
-                <p style="font-size: 12px; color: #777;">Powered by Your PaintWale</p>
+                <p style="font-size: 12px; color: #777;">Powered by Your {BRAND_NAME}</p>
             </div>
         </body>
     </html>
@@ -115,11 +108,11 @@ def sendMessage(request):
                 <p><strong>Subject:</strong> {subject}</p>
                 <p><strong>Message:</strong><br>{message}</p>
                 <p>We appreciate your interest, and one of our team members will reach out shortly.</p>
-                <p>Best regards,<br>Your PaintWale Team</p>
+                <p>Best regards,<br>Your {BRAND_NAME} Team</p>
             </div>
 
             <div style="padding: 20px; background-color: #f0f0f0; border-top: 1px solid #ccc; text-align: right;">
-                <p style="font-size: 12px; color: #777;">Powered by Your PaintWale</p>
+                <p style="font-size: 12px; color: #777;">Powered by Your {BRAND_NAME}</p>
             </div>
         </body>
     </html>
@@ -144,14 +137,47 @@ def sendMessage(request):
             html_message=email_body_to_user,  
         )
 
-        return JsonResponse({'success': 'Message sent successfully!'})
+        services = Service.objects.all()
+        service_type = getAllServiceType()
+        context ={
+        'brand_name': BRAND_NAME,
+        'service_data': services,
+        'service_type':service_type,
+        'exclude_footer': True
 
+                  }
+
+        return render(request, 'paintwaleapp/home.html', context)
     except Exception as e:
         print(f"Error sending email: {e}")
         return JsonResponse({'error': f'Failed to send message. Error: {str(e)}'})
     
 
+from django.shortcuts import render, get_object_or_404
+from .models import Service, ServiceImage
+
 def serviceDetails(request):
     service_title = request.GET.get('service', '') 
+    
+    service_id = request.GET.get('serviceId', '')  
+    
+    error_message = None
 
-    return render(request,"paintwaleapp/service_details.html" ,{'service_title': service_title})
+    if not service_id or not service_id.isdigit():
+        error_message = "Invalid or missing service ID."
+        service_images = []
+    else:
+        try:
+            service = get_object_or_404(Service, id=service_id)
+            service_images = ServiceImage.objects.filter(service=service)
+        except Service.DoesNotExist:
+            error_message = "Service not found."
+            service_images = []
+    context ={
+        'brand_name': BRAND_NAME,
+        'service_detail': service_title,
+        'service_images': service_images,
+        'error_message': error_message 
+    }
+
+    return render(request, "paintwaleapp/service_details.html",context)

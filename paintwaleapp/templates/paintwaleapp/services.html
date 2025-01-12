@@ -47,13 +47,13 @@
         <div class="row ">
             {% for service in service_data %}
             <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
-              <div class="card" onclick="redirectToServicePage('{{ service.cardTitle }}')">
-                <img src="{% static service.imagePath %}" class="card-img-top" alt="...">
+                <div class="card" onclick="redirectToServicePage('{{ service.service_name }}', '{{ service.id }}')">
+                    <img src="{{ service.service_image.url }}" class="card-img-top" alt="...">
                 <div class="card-body">
-                  <h5 class="card-title">{{service.cardTitle}}</h5>
-                  <p class="card-text">{{service.description}}
+                  <h5 class="card-title">{{service.service_name}}</h5>
+                  <p class="card-text">{{service.service_description}}
                   </p>
-                  <a href="{% url 'paintwale:contact' %}?service={{ service.cardTitle }}" class="btn">Buy Now</a>
+                  <a href="{% url 'paintwale:contact' %}?service={{ service.service_name }}" class="btn">Buy Now</a>
                 </div>
               </div>
            
@@ -63,9 +63,8 @@
     </div>
 </section>
 <script>
-    function redirectToServicePage(serviceTitle) {
-      // Redirect to the 'contact' page with the service parameter
-      window.location.href = "{% url 'paintwale:serviceDetails' %}?service=" + serviceTitle;
+    function redirectToServicePage(serviceTitle,serviceId) {
+      window.location.href = "{% url 'paintwale:serviceDetails' %}?service=" + serviceTitle + "&serviceId=" + serviceId;
     }
   </script>
 

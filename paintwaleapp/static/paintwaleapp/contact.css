@@ -172,6 +172,10 @@ textarea {
 :-ms-input-placeholder {
   color: #474544;
 }
+.submit{
+  display: flex;
+  justify-content: end;
+}
 
 #form_button {
   background: none;
@@ -190,6 +194,7 @@ textarea {
   -ms-transition: all 0.3s;
   -o-transition: all 0.3s;
   transition: all 0.3s;
+  align-items: end;
 }
 
 #form_button:hover {
