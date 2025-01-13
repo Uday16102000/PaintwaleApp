@@ -96,7 +96,7 @@ input[type="text"],
 [type="email"],
 select,
 textarea {
-  background: #e5d9b9;
+  background: #fff7e6;
   border: none;
   border-bottom: solid 2px #474544;
   color: #474544;
@@ -141,6 +141,7 @@ select::-ms-expand {
 
 .subject {
   width: 100%;
+  
 }
 
 .telephone {
@@ -171,6 +172,10 @@ textarea {
 :-ms-input-placeholder {
   color: #474544;
 }
+.submit{
+  display: flex;
+  justify-content: end;
+}
 
 #form_button {
   background: none;
@@ -189,6 +194,7 @@ textarea {
   -ms-transition: all 0.3s;
   -o-transition: all 0.3s;
   transition: all 0.3s;
+  align-items: end;
 }
 
 #form_button:hover {
@@ -249,4 +255,14 @@ textarea {
   margin-right: 12px;
   font-size: 1.5rem;
   color: black;
+}
+
+#container {
+  margin: 20px auto; /* Center the container if needed */
+  padding: 20px; /* Add some inner spacing */
+  background-color: #fff7e6; /* Soft light gray */
+  border-radius: 10px; /* Add rounded corners (optional) */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  max-width: 600px; /* Optional: Set a max width */
+  width: 100%; /* Ensure responsiveness */
 }

@@ -1,0 +1,33 @@
+{% extends "paintwaleapp/base.html" %} 
+{% block title %}Service Details{% endblock %} 
+{% load static %}
+{% block content %}
+
+<section class="service-details-section" id="service-detail">
+    <h1 class="m-4 ">
+        {% if  service_detail %}
+        {{ service_detail }}
+        {% endif %}
+    </h1>
+    <h1>
+      {% if error_message %}
+      {{ error_message }}
+      {% endif %}
+    </h1>
+    <div class="servicedetails-card-container">
+      {% for service in service_images%}
+
+      <div class="servicedetails-card">
+        <div class="servicedetails-card-image">
+          <img src="{{ service.image.url }}" alt="Tractor Emulsion">
+        </div>
+        <div class="servicedetails-card-details">
+          <h3>{{ service.service_detail_title}}</h3>
+          <p>Finish:{{ service.finish}}</p>
+          <a href="{% url 'paintwale:contact' %}?service={{ service_detail }}" class="service-detail-btn">View Price Details</a>
+        </div>
+      </div>
+      {% endfor %}
+      </div>
+      
+{% endblock %}

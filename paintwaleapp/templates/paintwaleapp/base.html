@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="{% static 'paintwaleapp/about.css' %}">
     <link rel="stylesheet" href="{% static 'paintwaleapp/home.css' %}">
     <link rel="stylesheet" href="{% static 'paintwaleapp/contact.css' %}">
+    <link rel="stylesheet" href="{% static 'paintwaleapp/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'paintwaleapp/service-details.css' %}">
+
+
 
     <link
   rel="stylesheet"
@@ -27,7 +31,12 @@
     <div class="container mt-0" style="max-width:100% ; padding: 0px;">
         {% block content %}{% endblock %}
     </div>
+      {% block footer %}
+      {% if exclude_footer != True %}
+          {% include 'paintwaleapp/footer.html' %}
+      {% endif %}
+  {% endblock %}
+  {% bootstrap_javascript %}
 
-    {% bootstrap_javascript %}
 </body>
 </html>

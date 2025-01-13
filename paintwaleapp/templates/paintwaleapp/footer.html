@@ -1,0 +1,49 @@
+{% load static %}
+
+<section class="footer-section" id="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 mt-3">
+        <img
+          src="{% static 'paintwaleapp/images/paintwale.png' %}"
+          alt="Paint Wale Logo"
+          class="footer-logo"
+        />
+        <p>
+          {{ brand_name }}, your trusted destination for premium paints and coatings.
+          With over 15 years of industry expertise, we offer quality products.
+          Visit us for vibrant colors and transformative solutions for your home
+          or business.
+        </p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+
+      <div class="col-lg-4 mt-5">
+        <h5>Quick Links</h5>
+        <ul class="footer-links">
+          <li><a href="{% url 'paintwale:home' %}">Home</a></li>
+          <li><a href="{% url 'paintwale:about' %}">About Us</a></li>
+          <li><a href="{% url 'paintwale:service' %}">Services</a></li>
+          <li><a href="{% url 'paintwale:contact' %}">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-4 mt-5">
+        <h5>Contact Us</h5>
+        <ul class="contact-info">
+          <li>
+            <i class="fas fa-map-marker-alt"></i> 2R8V+VM7, opposite Swami
+            Narayan Mandir, Dadar East, Dadar, Mumbai, Maharashtra 400014
+          </li>
+          <li><i class="fas fa-envelope"></i> udaymore437@gmail.com</li>
+          <li><i class="fas fa-phone"></i> +91-8379-028-700</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
