@@ -484,12 +484,29 @@ class ClubQuotation(APIView):
                             quotation_item.save()
                 
                 update_qutation_value(quotation,user_id)
-            return Response({'message': self.club_quotation['created'],'quotation_id': quotation.id})
+            return Response({'message': self.club_quotation['created'],'quotation_id': quotation.id},status=status.HTTP_200_OK)
         except Exception as e:
             if isinstance(e.args[0],dict):
                 return Response(e.args[0],status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({'message': e.args[0]},status=status.HTTP_401_UNAUTHORIZED)
+    
+    def delete(self, request):
+        try:
+            delete_data = request.data
+            user_id = get_userId_from_access_token(request)
+            last_quotation = Quotation.objects.filter(lead_id=delete_data['lead_id']).exclude(id=delete_data['quotation_id']).order_by('-updated_at').first()
+            if last_quotation is not None:
+                final_quotation = FinalQuotation.objects.get(lead_id=delete_data['lead_id'])
+                final_quotation.quotation_id = last_quotation.id
+                final_quotation.save()
+                update_qutation_value(last_quotation, user_id)
+                
+            QuotationItem.objects.filter(quotation_id=delete_data['quotation_id']).delete()
+            Quotation.objects.filter(id=delete_data['quotation_id']).delete()
+            return Response({'message': self.club_quotation['quotation_deleted']},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'message': self.club_quotation['error_delete']},status=status.HTTP_401_UNAUTHORIZED)
 
 class ViewQuotation(APIView):
     

@@ -41,7 +41,9 @@
         "created": "Quotation updated successfully !!",
         "error": "Failed to update the quotation !!",
         "error_fetching": "Error fetching the quotation",
-        "price_missing": "Price is missing"
+        "price_missing": "Price is missing",
+        "error_delete": "Error occured while deleting the quotation",
+        "quotation_deleted": "Quotation deleted successfully !!"
     },
     "view_quotation": {
         "error": "Failed to view the quotation"
