@@ -1,0 +1,24 @@
+{
+    "lead_id": 1,
+    "quotation_id": null,
+    "details": {
+        "1|1": [
+            {
+                "process_id": 1,
+                "product_id": 1,
+                "wall_id": 1,
+                "total_area": 200,
+                "wall_type": "wall",
+                "price": null
+            },
+            {
+                "process_id": 1,
+                "product_id": 2,
+                "wall_id": 2,
+                "total_area": 150,
+                "wall_type": "wall",
+                "price": null
+            }
+        ]
+    }
+}

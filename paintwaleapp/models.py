@@ -178,24 +178,6 @@ class City(models.Model):
         managed = True
         db_table = 'city'
 
-class PriceList(models.Model):
-    process = models.ForeignKey(Process, models.DO_NOTHING, db_column='process_id')
-    product = models.ForeignKey(Product, models.DO_NOTHING, db_column='product_id')
-    city = models.ForeignKey(City, models.DO_NOTHING,db_column='city_id')
-    price = models.FloatField(blank=True, null=True, default=None)
-    is_lumpsum_rate = models.IntegerField(blank=True, null=True,default=0) # 0: No, 1: Yes
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='created_by',related_name='createdpricelist')
-    updated_at = models.DateTimeField(auto_now_add=True)
-    updated_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='updated_by',related_name='updatedpricelist')
-    
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['process','product','city'],name='unique_process_product_city')
-        ]
-        managed = True
-        db_table = 'price_list'
-
 class Lead(models.Model):
     STATUS = [
         (PENDING, PENDING),
@@ -281,7 +263,7 @@ class Quotation(models.Model):
     brand = models.ForeignKey(ProductBrand, models.DO_NOTHING, db_column='brand_id',blank=True, null=True, default=None)
     quotation_value = models.FloatField(blank=True, null=True, default=None)
     discount = models.FloatField(blank=True, null=True, default=None)
-    status = models.BooleanField(blank=True, null=True, default=None)
+    status = models.BooleanField(blank=True, null=True, default=None) #0: Created, 1: Accepted, 2: Sent
     accepted_at = models.DateTimeField(blank=True, null=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='created_by',related_name='createdquotation')
@@ -300,6 +282,7 @@ class QuotationItem(models.Model):
     total_area = models.FloatField(blank=True, null=True, default=None)
     wall_type = models.CharField(max_length=255,blank=True, null=True, default=None)
     price = models.FloatField(blank=True, null=True, default=None)
+    total_price = models.FloatField(blank=True, null=True, default=None)
     discount = models.FloatField(blank=True, null=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='created_by',related_name='createdquotationtem')
@@ -307,3 +290,21 @@ class QuotationItem(models.Model):
     class Meta:
         managed = True
         db_table = 'quotation_item'
+
+class PriceList(models.Model):
+    process = models.ForeignKey(Process, models.DO_NOTHING, db_column='process_id')
+    product = models.ForeignKey(Product, models.DO_NOTHING, db_column='product_id')
+    city = models.ForeignKey(City, models.DO_NOTHING,db_column='city_id')
+    price = models.FloatField(blank=True, null=True, default=None)
+    is_lumpsum_rate = models.IntegerField(blank=True, null=True,default=0) # 0: No, 1: Yes
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='created_by',related_name='createdpricelist')
+    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='updated_by',related_name='updatedpricelist')
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['process','product','city'],name='unique_process_product_city')
+        ]
+        managed = True
+        db_table = 'price_list'

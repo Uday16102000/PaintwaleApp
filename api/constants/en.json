@@ -21,6 +21,21 @@
         "error": "Error while creating the lead !!",
         "lead_exists": "Lead already exists !! Try with new phone number",
         "error_fetching": "Error fetching the lead details"
+    },
+    "measurement": {
+        "created": "Measurement added successfully !!",
+        "error": "Failed to save the measurement !!",
+        "error_fetching": "Error fetching the rooms"
+    },
+    "quotation": {
+        "created": "Quotation created successfully !!",
+        "error": "Failed to create the quotation !!",
+        "error_fetching": "Error fetching the quotation",
+        "price_missing": "Price is missing"
+    },
+    "price_entry": {
+        "created": "Price entry added successfully !!",
+        "error": "Failed to add the price !!"
     }
     
 }

@@ -1,0 +1,79 @@
+{
+    "lead_id": 1,
+    "details": {
+        "room1|1": [
+            {
+                "wall_id": null,
+                "wall_type": "wall",
+                "add_area": 140,
+                "sub_area": 50,
+                "total_area": 90
+            },
+            {
+                "wall_id": null,
+                "wall_type": "wall",
+                "add_area": 100,
+                "sub_area": 50,
+                "total_area": 50
+            },
+            {
+                "wall_id": null,
+                "wall_type": "wall",
+                "add_area": 150,
+                "sub_area": 50,
+                "total_area": 100
+            },
+            {
+                "wall_id": null,
+                "wall_type": "wall",
+                "add_area": 200,
+                "sub_area": 50,
+                "total_area": 150
+            },
+            {
+                "wall_id": null,
+                "wall_type": "ceiling",
+                "add_area": 250,
+                "sub_area": 50,
+                "total_area": 200
+            }
+        ],
+        "room1|2": [
+            {
+                "wall_id": null,
+                "wall_type": "wall",
+                "add_area": 140,
+                "sub_area": 50,
+                "total_area": 90
+            },
+            {
+                "wall_id": null,
+                "wall_type": "wall",
+                "add_area": 100,
+                "sub_area": 50,
+                "total_area": 50
+            },
+            {
+                "wall_id": null,
+                "wall_type": "wall",
+                "add_area": 150,
+                "sub_area": 50,
+                "total_area": 100
+            },
+            {
+                "wall_id": null,
+                "wall_type": "wall",
+                "add_area": 200,
+                "sub_area": 50,
+                "total_area": 150
+            },
+            {
+                "wall_id": null,
+                "wall_type": "ceiling",
+                "add_area": 250,
+                "sub_area": 50,
+                "total_area": 200
+            }
+        ]
+    }
+}

@@ -11,6 +11,11 @@ urlpatterns = [
     path('wall_list/', views.WallsList.as_view(),name='wall_list'),
     path('city_list/', views.CityList.as_view(),name='city_list'),
     path('create_lead/', views.CreateLead.as_view(),name='create_lead'),
+    path('create_measurement/', views.CreateMeasurement.as_view(),name='create_measurement'),
+    path('measurement/<int:lead_id>/', views.CreateMeasurement.as_view(),name='measurement'),
+    path('create_quotation/', views.CreateQuotation.as_view(),name='create_quotation'),
+    path('quotation/<int:quotation_id>/', views.CreateQuotation.as_view(),name='quotation'),
+    path('create_price_entry/', views.CreatePrice.as_view(),name='create_price_entry'),
     
     
     
