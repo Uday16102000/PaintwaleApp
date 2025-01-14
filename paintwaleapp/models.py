@@ -123,6 +123,10 @@ class Service(models.Model):
     def __str__(self):
         return self.service_name
 
+    class Meta:
+        managed = True
+        db_table = 'service'
+
 
 class ServiceImage(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='service_detail_images')
@@ -133,3 +137,62 @@ class ServiceImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.service.service_name}"
+
+    class Meta:
+        managed = True
+        db_table = 'service_image'
+
+class ProductBrand(models.Model):
+    brand_name = models.CharField(max_length=100,blank=True, null=True,default=None)
+    description = models.TextField (blank=True, null=True, default=None)
+    image = models.TextField (blank=True, null=True, default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        managed = True
+        db_table = 'product_brand'
+
+class ServiceType(models.Model):
+    service_name = models.CharField(max_length=255,blank=False, null=False, unique=True)
+    service_image = models.TextField(blank=True, null=True, default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        managed = True
+        db_table = 'service_type'
+    
+
+class Process(models.Model):
+    name = models.CharField(max_length=100,blank=True, null=True, default=None)
+    description = models.TextField (blank=True, null=True, default=None)
+    image = models.TextField (blank=True, null=True, default=None)
+    active = models.BooleanField(blank=True, null=True, default=True)
+    servicetype = models.ForeignKey(ServiceType, models.DO_NOTHING,blank=True, null=True, default=None, db_column='servicetype_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        managed = True
+        db_table = 'process'
+
+class Product(models.Model):
+    name = models.CharField(max_length=255,blank=True, null=True, default=None)
+    description = models.TextField (blank=True, null=True, default=None)
+    product_type = models.CharField(max_length=100, blank=True, null=True, default=None)
+    product_category = models.CharField(max_length=100, blank=True, null=True, default=None)
+    image = models.TextField (blank=True, null=True, default=None)
+    active = models.BooleanField(blank=True, null=True, default=True)
+    servicetype = models.ForeignKey(ServiceType, models.DO_NOTHING,blank=True, null=True, default=None, db_column='servicetype_id')
+    brand = models.ForeignKey(ProductBrand, models.DO_NOTHING,blank=True, null=True, default=None, db_column='brand_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        managed = True
+        db_table = 'product'
+
+class Walls(models.Model):
+    wall_name = models.CharField(max_length=255,blank=True, null=True, default=None)
+    active = models.BooleanField(blank=True, null=True,default=True)
+    
+    class Meta:
+        managed = True
+        db_table = 'walls'
