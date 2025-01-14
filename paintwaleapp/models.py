@@ -308,3 +308,21 @@ class PriceList(models.Model):
         ]
         managed = True
         db_table = 'price_list'
+
+class FinalQuotation(models.Model):
+    lead = models.OneToOneField(Lead, models.DO_NOTHING, db_column='lead_id',blank=False, null=False)
+    quotation = models.OneToOneField(Quotation, models.DO_NOTHING, db_column='quotation_id',blank=False, null=False)
+    brand = models.ForeignKey(ProductBrand, models.DO_NOTHING, db_column='brand_id',blank=True, null=True, default=None)
+    quotation_value = models.FloatField(blank=True, null=True, default=None)
+    discount = models.FloatField(blank=True, null=True, default=None)
+    status = models.BooleanField(blank=True, null=True, default=None) #0: Created, 1: Accepted, 2: Sent
+    accepted_at = models.DateTimeField(blank=True, null=True, default=None)
+    quote_sent = models.DateTimeField(blank=True, null=True, default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='created_by',related_name='createdfinalquotation')
+    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='updated_by',related_name='updatedfinalquotation')
+
+    class Meta:
+        managed = True
+        db_table = 'final_quotation'

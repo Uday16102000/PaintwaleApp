@@ -293,12 +293,30 @@ def create_quotation(post_data,user_id,view_quotation=False):
         )
     return quotation
 
-def update_qutation_value(quotation):
+def update_qutation_value(quotation,user_id):
+    lead_id = quotation.lead_id
     total = QuotationItem.objects.filter(quotation_id=quotation.id).aggregate(total=Sum('total_price'))['total'] or 0
     brands = Counter(list(QuotationItem.objects.filter(quotation_id=quotation.id).exclude(product__brand_id=None).values_list('product__brand_id',flat=True)))
     quotation.quotation_value = total
     quotation.brand_id = brands.most_common(1)[0][0] if len(brands) != 0 else None
     quotation.save()
+    
+    final_quotation = FinalQuotation.objects.filter(lead_id=lead_id)
+    if final_quotation.exists():
+        final_quotation = final_quotation[0]
+    else:
+        final_quotation = FinalQuotation()
+        final_quotation.created_at = datetime.now()
+        final_quotation.created_by_id = user_id
+    
+    final_quotation.lead_id = lead_id
+    final_quotation.brand_id = quotation.brand_id
+    final_quotation.quotation_id = quotation.id
+    final_quotation.quotation_value = quotation.quotation_value
+    final_quotation.discount = quotation.discount
+    final_quotation.updated_at = datetime.now()
+    final_quotation.updated_by_id = user_id
+    final_quotation.save()
 
 class CreateQuotation(APIView):
     
@@ -381,7 +399,7 @@ class CreateQuotation(APIView):
                         quotation_item.total_area = val['total_area']
                         quotation_item.wall_type = val['wall_type'].lower()
                         quotation_item.save()
-                update_qutation_value(quotation)
+                update_qutation_value(quotation,user_id)
             return Response({'message': self.quotation['created'],'id': quotation.id},status=status.HTTP_200_OK)
         except Exception as e:
             if isinstance(e.args[0],dict):
@@ -455,7 +473,7 @@ class ViewQuotation(APIView):
                             quotation_item.wall_type = row.wall_type
                             quotation_item.save()
                 
-                update_qutation_value(quotation)
+                update_qutation_value(quotation,user_id)
             return Response({'message': self.viewquotation['created'],'quotation_id': quotation.id})
         except Exception as e:
             if isinstance(e.args[0],dict):
