@@ -1,0 +1,20 @@
+{
+    "register": {
+        "user_registered": "User registration successful !!",
+        "user_already_exists": "User already exists !!"
+    },
+    "login": {
+        "login_success": "Login successful !!",
+        "no_user_found": "No User found !!",
+        "invalid_credentials": "Invalid credentails !!",
+        "invalid_otp": "Invalid OTP !!",
+        "key_missing": "Some keys is missing",
+        "otp_sent": "OTP sent on your registered mobile number !!"
+    },
+    "common_message": {
+        "error": "Error occured while fetching the records",
+        "error_creating": "Error while creating !!",
+        "creating": "Entry created successfull !!"
+    }
+    
+}

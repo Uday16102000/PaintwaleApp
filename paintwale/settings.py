@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import pymysql, os
+from datetime import timedelta
 from pathlib import Path
 pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,6 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap5',
+    "rest_framework",
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'paintwaleapp.apps.PaintwaleappConfig',
     'api'
 ]
@@ -133,6 +138,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Use for JWT Authentication
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',  # Ensure that users are authenticated
+    # ],
+}
+
+ROOT_URLCONF = "paintwale.urls"
+AUTH_USER_MODEL = 'paintwaleapp.Users'
+
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -155,3 +172,12 @@ EMAIL_HOST_PASSWORD = 'dsro cdaz ryds cuxh'
 MEDIA_URL = '/media/'  # URL to access media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory to store media files
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Access token expiry time (30 minutes)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Refresh token expiry time (7 days)
+    'ROTATE_REFRESH_TOKENS': True,  # Rotate refresh tokens on every use (for security)
+    'BLACKLIST_AFTER_ROTATION': True,  # Blacklist the old refresh token after a new one is issued
+    'ALGORITHM': 'HS256',  # JWT algorithm
+    'SIGNING_KEY': SECRET_KEY,  # Secret key for signing the token
+    'AUTH_HEADER_TYPES': ('Bearer',),  # Authorization header type for token (default is "Bearer")
+}

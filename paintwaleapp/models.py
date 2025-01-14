@@ -1,10 +1,8 @@
 from django.db import models
-
-# Create your models here.
-
-
-from django.db import models
-
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.utils.text import slugify
+import random,string
 
 # class AuthGroup(models.Model):
 #     name = models.CharField(unique=True, max_length=150)
@@ -141,6 +139,49 @@ class ServiceImage(models.Model):
     class Meta:
         managed = True
         db_table = 'service_image'
+
+def generate_unique_username(name, model_class):
+    base_username = slugify(name)[:20]  # Slugify and limit to 20 chars
+    username = base_username
+    counter = 1
+    while model_class.objects.filter(username=username).exists():
+        username = f"{base_username}{counter}"
+        counter += 1
+    return username
+
+class Users(models.Model):
+    first_name = models.CharField(max_length=100,blank=True, null=True,default=None)
+    last_name = models.CharField(max_length=100,blank=True, null=True,default=None)
+    username = models.CharField(max_length=100,blank=False, null=False,unique=True)
+    phone = models.CharField(max_length=20,blank=True, null=True,default=None)
+    otp = models.IntegerField(blank=True, null=True,default=None)
+    email_id = models.CharField(max_length=50,blank=True, null=True,default=None)
+    active = models.BooleanField(blank=True, null=True, default=True)
+    created_at = models.DateTimeField(auto_now=True)
+    
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
+    
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    @property
+    def is_active(self):
+        return self.active
+    
+    class Meta:
+        managed = True
+        db_table = 'users'
+
+@receiver(pre_save, sender=Users)
+def set_unique_username(sender, instance, **kwargs):
+    if not instance.username:
+        instance.username = generate_unique_username(instance.first_name,sender)
 
 class ProductBrand(models.Model):
     brand_name = models.CharField(max_length=100,blank=True, null=True,default=None)
