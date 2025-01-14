@@ -228,6 +228,8 @@ class Lead(models.Model):
     alternate_phone = models.CharField(max_length=20,blank=True, null=True,default=None)
     email = models.CharField(max_length=50,blank=True, null=True,default=None)
     status = models.CharField(choices=STATUS,max_length=50,blank=True, null=True,default=None)
+    lead_date = models.DateField(blank=True, null=True,default=None)
+    lead_time = models.TimeField(blank=True, null=True,default=None)
     landmark = models.CharField(max_length=255,blank=True, null=True,default=None)
     visit_date_time = models.DateTimeField(blank=True, null=True,default=None)
     re_schedule_time = models.DateTimeField(blank=True, null=True,default=None)

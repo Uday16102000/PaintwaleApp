@@ -1,0 +1,17 @@
+{
+    "name" : "Sumit",
+    "phone" : "9999099909",
+    "city_id" : "1",
+    "alternate_phone" : null,
+    "email" : "sumit@gmail.com",
+    "status" : "Pending",
+    "landmark" : null,
+    "visit_date_time" : "2025-01-14 10:01",
+    "re_schedule_time" : null,
+    "channel" : "Google",
+    "channel_reference" : null,
+    "project_type" : "Interior Painting",
+    "house_type" : "2 BHK",
+    "address" : "Nodia Sector",
+    "remarks" : null
+}

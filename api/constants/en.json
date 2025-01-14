@@ -15,6 +15,12 @@
         "error": "Error occured while fetching the records",
         "error_creating": "Error while creating !!",
         "creating": "Entry created successfull !!"
+    },
+    "lead": {
+        "created": "Lead created successfully !!",
+        "error": "Error while creating the lead !!",
+        "lead_exists": "Lead already exists !! Try with new phone number",
+        "error_fetching": "Error fetching the lead details"
     }
     
 }

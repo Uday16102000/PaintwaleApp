@@ -9,6 +9,9 @@ urlpatterns = [
     path('processproduct/', views.ProcessProduct.as_view(),name='processproduct'),
     path('room_list/', views.RoomTypeList.as_view(),name='room_list'),
     path('wall_list/', views.WallsList.as_view(),name='wall_list'),
+    path('city_list/', views.CityList.as_view(),name='city_list'),
+    path('create_lead/', views.CreateLead.as_view(),name='create_lead'),
+    
     
     
 ]
