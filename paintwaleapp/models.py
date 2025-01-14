@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from django.utils.text import slugify
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.hashers import make_password, check_password
+from api.constants.constant_method import *
 
 class Service(models.Model):
     service_name = models.CharField(max_length=255, unique=True)
@@ -194,5 +195,113 @@ class PriceList(models.Model):
         ]
         managed = True
         db_table = 'price_list'
+
+class Lead(models.Model):
+    STATUS = [
+        (PENDING, PENDING),
+        (MEASUREMENT_DONE, MEASUREMENT_DONE),
+        (QUOTATION_SENT, QUOTATION_SENT),
+        (RESCEDULE, RESCEDULE),
+        (REJECTED, REJECTED),
+        (CALLBACKREQUESTED, CALLBACKREQUESTED),
+        (ACCEPTED, ACCEPTED)
+    ]
     
+    PROJECT_TYPE = [
+        (INTERIOR_PAINTING, INTERIOR_PAINTING),
+        (EXTERIOR_PAINTING, EXTERIOR_PAINTING),
+        (WATERPROOFING, WATERPROOFING),
+        (OTHER, OTHER)
+    ]
     
+    HOUSE_TYPE = [
+        (ONEBHK, ONEBHK),
+        (TWOBHK, TWOBHK),
+        (THREEBHK, THREEBHK),
+        (ROWHOUSE, ROWHOUSE),
+        (INDEPENDENTVILLA, INDEPENDENTVILLA)
+    ]
+    
+    name = models.CharField(max_length=255,blank=True, null=True,default=None)
+    phone = models.CharField(max_length=20,blank=True, null=True,default=None)
+    city = models.ForeignKey(City, models.DO_NOTHING, db_column='city_id',blank=False, null=False)
+    alternate_phone = models.CharField(max_length=20,blank=True, null=True,default=None)
+    email = models.CharField(max_length=50,blank=True, null=True,default=None)
+    status = models.CharField(choices=STATUS,max_length=50,blank=True, null=True,default=None)
+    landmark = models.CharField(max_length=255,blank=True, null=True,default=None)
+    visit_date_time = models.DateTimeField(blank=True, null=True,default=None)
+    re_schedule_time = models.DateTimeField(blank=True, null=True,default=None)
+    channel = models.CharField(max_length=255,blank=True, null=True,default=None)
+    channel_reference = models.CharField(max_length=255,blank=True, null=True,default=None)
+    project_type = models.CharField(choices=PROJECT_TYPE,max_length=255,blank=True, null=True,default=None)
+    house_type = models.CharField(choices=HOUSE_TYPE,max_length=255,blank=True, null=True,default=None)
+    address = models.TextField(blank=True, null=True,default=None)
+    remarks = models.TextField(blank=True, null=True,default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='updated_by',related_name='updatedlead')
+    
+    class Meta:
+        managed = True
+        db_table = 'lead'
+
+class RoomType(models.Model):
+    room_type = models.CharField(max_length=100,blank=True, null=True, default=None)
+    active = models.BooleanField(blank=True, null=True, default=True)
+    
+    class Meta:
+        managed = True
+        db_table = 'room_type'
+
+class Room(models.Model):
+    lead = models.ForeignKey(Lead, models.DO_NOTHING, db_column='lead_id')
+    roomtype = models.ForeignKey(RoomType, models.DO_NOTHING, db_column='roomtype_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        managed = True
+        db_table = 'room'
+
+class Wall(models.Model):
+    room = models.ForeignKey(Room, models.DO_NOTHING, db_column='room_id')
+    wall_type = models.CharField(max_length=255,blank=True, null=True, default=None)
+    add_area = models.FloatField(blank=True, null=True, default=None)
+    sub_area = models.FloatField(blank=True, null=True, default=None)
+    total_area = models.FloatField(blank=True, null=True, default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        managed = True
+        db_table = 'wall'
+
+class Quotation(models.Model):
+    lead = models.ForeignKey(Lead, models.DO_NOTHING, db_column='lead_id',blank=False, null=False)
+    brand = models.ForeignKey(ProductBrand, models.DO_NOTHING, db_column='brand_id',blank=True, null=True, default=None)
+    quotation_value = models.FloatField(blank=True, null=True, default=None)
+    discount = models.FloatField(blank=True, null=True, default=None)
+    status = models.BooleanField(blank=True, null=True, default=None)
+    accepted_at = models.DateTimeField(blank=True, null=True, default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='created_by',related_name='createdquotation')
+    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='updated_by',related_name='updatedquotation')
+    
+    class Meta:
+        managed = True
+        db_table = 'quotation'
+
+class QuotationItem(models.Model):
+    quotation = models.ForeignKey(Quotation, models.DO_NOTHING, db_column='quotation_id',blank=False, null=False)
+    process = models.ForeignKey(Process, models.DO_NOTHING, db_column='process_id',blank=False, null=False)
+    product = models.ForeignKey(Product, models.DO_NOTHING, db_column='product_id',blank=False, null=False)
+    wall = models.ForeignKey(Wall, models.DO_NOTHING, db_column='wall_id',blank=False, null=False)
+    total_area = models.FloatField(blank=True, null=True, default=None)
+    wall_type = models.CharField(max_length=255,blank=True, null=True, default=None)
+    price = models.FloatField(blank=True, null=True, default=None)
+    discount = models.FloatField(blank=True, null=True, default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(Users, models.DO_NOTHING,db_column='created_by',related_name='createdquotationtem')
+    
+    class Meta:
+        managed = True
+        db_table = 'quotation_item'
