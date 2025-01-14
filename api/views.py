@@ -274,6 +274,32 @@ class CreatePrice(APIView):
         except Exception as e:
             return Response({'message': self.price_entry['error']},status=status.HTTP_401_UNAUTHORIZED)
 
+def create_quotation(post_data,user_id,view_quotation=False):
+    quotation = Quotation.objects.filter(id=post_data['quotation_id'])
+    if not view_quotation and quotation.exists():
+        quotation = quotation[0]
+    else:
+        quotation = Quotation.objects.create(
+            lead_id = post_data['lead_id'],
+            brand_id = None,
+            quotation_value = None,
+            discount = None,
+            status = 0,
+            accepted_at = None,
+            created_at = datetime.now(),
+            created_by_id = user_id,
+            updated_at = datetime.now(),
+            updated_by_id = user_id
+        )
+    return quotation
+
+def update_qutation_value(quotation):
+    total = QuotationItem.objects.filter(quotation_id=quotation.id).aggregate(total=Sum('total_price'))['total'] or 0
+    brands = Counter(list(QuotationItem.objects.filter(quotation_id=quotation.id).exclude(product__brand_id=None).values_list('product__brand_id',flat=True)))
+    quotation.quotation_value = total
+    quotation.brand_id = brands.most_common(1)[0][0] if len(brands) != 0 else None
+    quotation.save()
+
 class CreateQuotation(APIView):
     
     permission_classes = [IsAuthenticated]
@@ -301,25 +327,6 @@ class CreateQuotation(APIView):
         except Exception as e:
             return Response({'message': self.quotation['error_fetching']},status=status.HTTP_401_UNAUTHORIZED)
     
-    def create_quotation(self, post_data,user_id):
-        quotation = Quotation.objects.filter(id=post_data['quotation_id'])
-        if quotation.exists():
-            quotation = quotation[0]
-        else:
-            quotation = Quotation.objects.create(
-                lead_id = post_data['lead_id'],
-                brand_id = None,
-                quotation_value = None,
-                discount = None,
-                status = 0,
-                accepted_at = None,
-                created_at = datetime.now(),
-                created_by_id = user_id,
-                updated_at = datetime.now(),
-                updated_by_id = user_id
-            )
-        return quotation
-    
     def post(self, request):
         try:
             post_data = request.data
@@ -327,7 +334,7 @@ class CreateQuotation(APIView):
             lead = Lead.objects.get(id=post_data['lead_id'])
             city_id = lead.city_id
             with transaction.atomic():
-                quotation = self.create_quotation(post_data, user_id)
+                quotation = create_quotation(post_data, user_id)
                 for key, value in post_data['details'].items():
                     keys = key.split('|')
                     try:
@@ -374,12 +381,82 @@ class CreateQuotation(APIView):
                         quotation_item.total_area = val['total_area']
                         quotation_item.wall_type = val['wall_type'].lower()
                         quotation_item.save()
-                total = QuotationItem.objects.filter(quotation_id=quotation.id).aggregate(total=Sum('total_price'))['total'] or 0
-                brands = Counter(list(QuotationItem.objects.filter(quotation_id=quotation.id).values_list('product__brand_id',flat=True)))
-                quotation.quotation_value = total
-                quotation.brand_id = brands.most_common(1)[0][0]
-                quotation.save()
+                update_qutation_value(quotation)
             return Response({'message': self.quotation['created'],'id': quotation.id},status=status.HTTP_200_OK)
+        except Exception as e:
+            if isinstance(e.args[0],dict):
+                return Response(e.args[0],status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({'message': e.args[0]},status=status.HTTP_401_UNAUTHORIZED)
+
+class ViewQuotation(APIView):
+    
+    permission_classes = [IsAuthenticated]
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        json_data = read_json_file()
+        self.viewquotation = json_data['view_quotation']
+    
+    def get(self, request,quotation_id):
+        try:
+            quotation = Quotation.objects.get(id=quotation_id)
+            lead = Lead.objects.filter(id=quotation.lead_id).values('id','name','phone','city_id','alternate_phone','email','status','visit_date_time','channel','channel_reference','project_type','house_type','address').annotate(
+                city_name = F('city__city_name')
+            ).get()
+            lead['quotation_id'] = quotation.id
+            rooms = QuotationItem.objects.filter(quotation_id=quotation.id).values('process_id','product_id','wall_type').annotate(
+                area = Sum('total_area'),
+                totalprice = Sum('total_price'),
+            ).distinct()
+            return Response({'rooms': rooms, 'lead': lead})
+        except Exception as e:
+            return Response({'message': self.viewquotation['error_fetching']},status=status.HTTP_401_UNAUTHORIZED)
+
+    def post(self, request):
+        try:
+            post_data = request.data
+            user_id = get_userId_from_access_token(request)
+            with transaction.atomic():
+                if not post_data['is_updated']:
+                    quotation = Quotation.objects.get(id=post_data['quotation_id'])
+                else:
+                    quotation = create_quotation(post_data, user_id,view_quotation=True)
+
+                for val in post_data['rooms']:
+                    quotation_items = QuotationItem.objects.filter(quotation_id=post_data['quotation_id'],process_id=val['process_id'],product_id=val['product_id'],wall_type=val['wall_type'])
+                    
+                    price_entry = PriceList.objects.filter(process_id=val['process_id'],product_id=val['product_id'],city_id=post_data['city_id'])
+                    if price_entry.exists():
+                        price_entry = price_entry[0]
+                    else:
+                        process = Process.objects.get(id=val['process_id'])
+                        product = Product.objects.get(id=val['product_id'])
+                        raise ValueError({ 'message': self.viewquotation['price_missing'], 'process_id': val['process_id'],'product_id': val['product_id'],'city_id': post_data['city_id'],'process': process.name, 'product': product.name })
+                    
+                    for row in quotation_items:
+                        if not post_data['is_updated']:
+                            row.price = price_entry.price
+                            row.total_price = (price_entry.price * float(row.total_area))
+                            row.process_id = val['process_id']
+                            row.product_id = val['product_id']
+                            row.save()
+                        else:
+                            quotation_item = QuotationItem()
+                            quotation_item.created_at = datetime.now()
+                            quotation_item.created_by_id = user_id
+                            quotation_item.quotation_id = quotation.id
+                            quotation_item.wall_id = row.wall_id
+                            quotation_item.price = price_entry.price
+                            quotation_item.total_price = (price_entry.price * float(row.total_area))
+                            quotation_item.process_id = val['process_id']
+                            quotation_item.product_id = val['product_id']
+                            quotation_item.total_area = row.total_area
+                            quotation_item.wall_type = row.wall_type
+                            quotation_item.save()
+                
+                update_qutation_value(quotation)
+            return Response({'message': self.viewquotation['created'],'quotation_id': quotation.id})
         except Exception as e:
             if isinstance(e.args[0],dict):
                 return Response(e.args[0],status=status.HTTP_403_FORBIDDEN)

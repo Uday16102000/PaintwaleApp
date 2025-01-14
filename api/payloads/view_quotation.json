@@ -1,0 +1,22 @@
+{
+    "lead_id": 1,
+    "quotation_id": 2,
+    "city_id": 1,
+    "is_updated": false,
+    "rooms": [
+        {
+            "process_id": 1,
+            "product_id": 1,
+            "wall_type": "wall",
+            "area": 1350.0,
+            "totalprice": 4900.0
+        },
+        {
+            "process_id": 1,
+            "product_id": 2,
+            "wall_type": "wall",
+            "area": 1220.0,
+            "totalprice": 1680.0
+        }
+    ]
+}

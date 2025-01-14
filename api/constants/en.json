@@ -36,6 +36,12 @@
     "price_entry": {
         "created": "Price entry added successfully !!",
         "error": "Failed to add the price !!"
+    },
+    "view_quotation": {
+        "created": "Quotation updated successfully !!",
+        "error": "Failed to update the quotation !!",
+        "error_fetching": "Error fetching the quotation",
+        "price_missing": "Price is missing"
     }
     
 }
