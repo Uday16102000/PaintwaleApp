@@ -299,6 +299,8 @@ def update_qutation_value(quotation,user_id):
     brands = Counter(list(QuotationItem.objects.filter(quotation_id=quotation.id).exclude(product__brand_id=None).values_list('product__brand_id',flat=True)))
     quotation.quotation_value = total
     quotation.brand_id = brands.most_common(1)[0][0] if len(brands) != 0 else None
+    quotation.updated_at = datetime.now()
+    quotation.updated_by_id = user_id
     quotation.save()
     
     final_quotation = FinalQuotation.objects.filter(lead_id=lead_id)
@@ -317,6 +319,14 @@ def update_qutation_value(quotation,user_id):
     final_quotation.updated_at = datetime.now()
     final_quotation.updated_by_id = user_id
     final_quotation.save()
+    
+    if final_quotation.status in [1,3]:
+        Quotation.objects.filter(lead_id=lead_id,status=3).update(status=0,accepted_at=None)
+        Quotation.objects.filter(lead_id=lead_id,status__in=[1,2]).update(status=3)
+        quotation.status = 1
+        quotation.accepted_at = datetime.now()
+        quotation.save()
+    return final_quotation
 
 class CreateQuotation(APIView):
     
@@ -407,14 +417,14 @@ class CreateQuotation(APIView):
             else:
                 return Response({'message': e.args[0]},status=status.HTTP_401_UNAUTHORIZED)
 
-class ViewQuotation(APIView):
+class ClubQuotation(APIView):
     
     permission_classes = [IsAuthenticated]
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         json_data = read_json_file()
-        self.viewquotation = json_data['view_quotation']
+        self.club_quotation = json_data['club_quotation']
     
     def get(self, request,quotation_id):
         try:
@@ -429,7 +439,7 @@ class ViewQuotation(APIView):
             ).distinct()
             return Response({'rooms': rooms, 'lead': lead})
         except Exception as e:
-            return Response({'message': self.viewquotation['error_fetching']},status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'message': self.club_quotation['error_fetching']},status=status.HTTP_401_UNAUTHORIZED)
 
     def post(self, request):
         try:
@@ -474,9 +484,66 @@ class ViewQuotation(APIView):
                             quotation_item.save()
                 
                 update_qutation_value(quotation,user_id)
-            return Response({'message': self.viewquotation['created'],'quotation_id': quotation.id})
+            return Response({'message': self.club_quotation['created'],'quotation_id': quotation.id})
         except Exception as e:
             if isinstance(e.args[0],dict):
                 return Response(e.args[0],status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({'message': e.args[0]},status=status.HTTP_401_UNAUTHORIZED)
+
+class ViewQuotation(APIView):
+    
+    permission_classes = [IsAuthenticated]
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        json_data = read_json_file()
+        self.view_quotation = json_data['view_quotation']
+    
+    def get(self, request, lead_id):
+        try:
+            quotations = Quotation.objects.filter(lead_id=lead_id).values('id','quotation_value','discount','status','accepted_at','created_at').annotate(
+                user = Concat(Coalesce(F('created_by__first_name'),Value(''),output_field=CharField()),Value(' '),Coalesce(F('created_by__last_name'),Value(''),output_field=CharField())),
+                brand_name = F('brand__brand_name'),
+                total_value = Sum('quotationitem__total_price'),
+                total_area = Sum('quotationitem__total_area'),
+            ).order_by('-updated_at')
+            return Response(quotations,status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'message': self.view_quotation['error']},status=status.HTTP_401_UNAUTHORIZED)
+
+class AcceptQuotation(APIView):
+    
+    permission_classes = [IsAuthenticated]
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        json_data = read_json_file()
+        self.accept_quotation = json_data['accept_quotation']
+    
+    def post(self, request):
+        try:
+            post_data = request.data
+            user_id = get_userId_from_access_token(request)
+            if post_data['reset']:
+                final_quotation = FinalQuotation.objects.get(lead_id=post_data['lead_id'])
+                final_quotation.status = 0
+                final_quotation.accepted_at = None
+                final_quotation.updated_at = datetime.now()
+                final_quotation.updated_by_id = user_id
+                final_quotation.save()
+                Quotation.objects.filter(lead_id=post_data['lead_id']).update(status = 0,updated_at = datetime.now(),updated_by_id = user_id)
+                return Response({'message': self.accept_quotation['reset_message']},status=status.HTTP_200_OK)
+            else:
+                final_quotation = FinalQuotation.objects.get(lead_id=post_data['lead_id'])
+                final_quotation.quotation_id = post_data['quotation_id']
+                final_quotation.status = post_data['status']
+                final_quotation.accepted_at = datetime.now()
+                final_quotation.updated_at = datetime.now()
+                final_quotation.updated_by_id = user_id
+                final_quotation.save()
+                update_qutation_value(final_quotation.quotation, user_id)
+            
+            return Response({'message': self.accept_quotation['accepted']},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'message': self.accept_quotation['error']},status=status.HTTP_401_UNAUTHORIZED)

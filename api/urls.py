@@ -16,8 +16,11 @@ urlpatterns = [
     path('create_quotation/', views.CreateQuotation.as_view(),name='create_quotation'),
     path('quotation/<int:quotation_id>/', views.CreateQuotation.as_view(),name='quotation'),
     path('create_price_entry/', views.CreatePrice.as_view(),name='create_price_entry'),
-    path('view_quotation/<int:quotation_id>/', views.ViewQuotation.as_view(),name='view_quotation_get'),
-    path('view_quotation/', views.ViewQuotation.as_view(),name='view_quotation'),
+    path('club_quotation/<int:quotation_id>/', views.ClubQuotation.as_view(),name='club_quotation_get'),
+    path('club_quotation/', views.ClubQuotation.as_view(),name='club_quotation'),
+    path('view_quotation/<int:lead_id>/', views.ViewQuotation.as_view(),name='view_quotation'),
+    path('accept_quotation/', views.AcceptQuotation.as_view(),name='accept_quotation'),
+    
     
     
     

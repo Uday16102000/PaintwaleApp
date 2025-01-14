@@ -37,11 +37,19 @@
         "created": "Price entry added successfully !!",
         "error": "Failed to add the price !!"
     },
-    "view_quotation": {
+    "club_quotation": {
         "created": "Quotation updated successfully !!",
         "error": "Failed to update the quotation !!",
         "error_fetching": "Error fetching the quotation",
         "price_missing": "Price is missing"
+    },
+    "view_quotation": {
+        "error": "Failed to view the quotation"
+    },
+    "accept_quotation": {
+        "accepted": "Quotation accepted successfully !!",
+        "error": "Failed to accept the quotation",
+        "reset_message": "Quotation reset successfully !!"
     }
     
 }
