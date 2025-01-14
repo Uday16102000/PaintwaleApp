@@ -51,6 +51,29 @@ class Login(APIView):
         except Exception as e:
             return Response({'message': self.login_json['invalid_credentials']},status=status.HTTP_401_UNAUTHORIZED)
 
+class RoomTypeList(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        json_data = read_json_file()
+        self.room_type = json_data['common_message']
+    
+    def get(self, request):
+        try:
+            rooms = RoomType.objects.filter(active=True).values_list('room_type',flat=True).distinct()
+            return Response({'rooms': rooms},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'message': self.room_type['error']},status=status.HTTP_401_UNAUTHORIZED)
+    
+    def post(self, request):
+        try:
+            post_data = request.data
+            RoomType.objects.create(room_type=post_data['room_name'],active=True)
+            return Response({'message': self.room_type['creating']},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'message': self.room_type['error_creating']},status=status.HTTP_401_UNAUTHORIZED)
+
 class WallsList(APIView):
     permission_classes = [IsAuthenticated]
     
